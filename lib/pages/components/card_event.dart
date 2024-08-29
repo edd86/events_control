@@ -2,6 +2,7 @@ import 'package:events_control/models/event.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sizer/sizer.dart';
 
 class CardEvent extends StatelessWidget {
   const CardEvent({required this.event, super.key});
@@ -9,11 +10,10 @@ class CardEvent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Card(
       color: Colors.teal[100],
       child: SizedBox(
-        height: size.height * .2,
+        height: 20.h,
         width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -26,25 +26,25 @@ class CardEvent extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: size.height * .015),
+            SizedBox(height: 1.h,),
             Text(
               event.location,
               style: GoogleFonts.kanit(),
             ),
-            SizedBox(height: size.height * .025),
-            const Row(
+            SizedBox(height: 2.h),
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 FaIcon(
                   FontAwesomeIcons.solidCalendarDays,
-                  size: 20,
+                  size: 18.h,
                 ),
-                Text('25/01/2025'),
+                const Text('25/01/2025'),
                 FaIcon(
                   FontAwesomeIcons.clock,
-                  size: 20,
+                  size: 18.h,
                 ),
-                Text('10:00 AM'),
+                const Text('10:00 AM'),
               ],
             )
           ],

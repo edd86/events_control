@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'components/event_dialog.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -34,7 +36,12 @@ class _HomePageState extends State<HomePage> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton(
           child: const FaIcon(FontAwesomeIcons.calendarPlus),
-          onPressed: () => {},
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) => EventDialog(),
+            );
+          },
         ),
       ),
     );
