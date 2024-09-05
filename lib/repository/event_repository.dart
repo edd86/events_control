@@ -5,7 +5,7 @@ import 'package:sqflite/sqflite.dart';
 class EventRepository {
   Future<Event> addEvent(Event event) async {
     final db = await DatabaseHelper().database;
-    final id = await db.insert('event', event.toMap(),
+    final id = await db.insert('events', event.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
     return event.copyWith(id: id);
   }
@@ -36,13 +36,13 @@ class EventRepository {
   Future<Event> updateEvent(Event event) async {
     final db = await DatabaseHelper().database;
     await db
-        .update('event', event.toMap(), where: 'id = ?', whereArgs: [event.id]);
+        .update('events', event.toMap(), where: 'id = ?', whereArgs: [event.id]);
     return event;
   }
 
   Future<Event> deleteEvent(Event event) async {
     final db = await DatabaseHelper().database;
-    await db.delete('event', where: 'id = ?', whereArgs: [event.id]);
+    await db.delete('events', where: 'id = ?', whereArgs: [event.id]);
     return event;
   }
 }

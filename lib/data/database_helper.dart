@@ -1,4 +1,3 @@
-
 import 'package:events_control/data/sqlite_code.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -8,9 +7,7 @@ class DatabaseHelper {
   static Database? _database;
 
   Future<Database> get database async {
-    if (_database != null) {
-      _database = await _initDb('events.db');
-    }
+    _database ??= await _initDb('events.db');
     return _database!;
   }
 

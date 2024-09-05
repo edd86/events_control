@@ -1,14 +1,25 @@
 import 'package:events_control/functions/date_time_functions.dart';
+import 'package:events_control/models/event.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:sizer/sizer.dart';
 
-class EventDialog extends StatelessWidget {
-  EventDialog({super.key});
+import '../../repository/event_repository.dart';
 
+class EventDialog extends StatefulWidget {
+  const EventDialog({super.key});
+
+  @override
+  State<EventDialog> createState() => _EventDialogState();
+}
+
+class _EventDialogState extends State<EventDialog> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
+  final googleStyle = GoogleFonts.kanit(fontSize: 15.sp);
+  DateTime now = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +43,7 @@ class EventDialog extends StatelessWidget {
                 icon: const FaIcon(FontAwesomeIcons.letterboxd),
                 label: Text(
                   'Nombre del evento',
-                  style: GoogleFonts.kanit(fontSize: 15.sp),
+                  style: googleStyle,
                 ),
               ),
             ),
@@ -42,42 +53,65 @@ class EventDialog extends StatelessWidget {
                 icon: const FaIcon(FontAwesomeIcons.mapLocation),
                 label: Text(
                   'Ubicación',
-                  style: GoogleFonts.kanit(fontSize: 15.sp),
+                  style: googleStyle,
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    DateTimeFunctions().dateToString(DateTime.now()),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    DateTimeFunctions().timeToString(DateTime.now()),
-                  ),
-                )
-              ],
-            )
+            TextButton(
+              child: Text(
+                '${DateTimeFunctions().dateToString(now)} ${DateTimeFunctions().timeToString(now)}',
+                style: googleStyle,
+              ),
+              onPressed: () async {
+                final DateTime? newDate = await showOmniDateTimePicker(
+                  context: context,
+                  is24HourMode: true,
+                  firstDate: now,
+                  initialDate: now,
+                );
+                if (newDate != null) {
+                  changeDateState(newDate);
+                }
+              },
+            ),
           ],
         ),
       ),
       actions: [
         TextButton(
+          child: Text(
+            'Cancelar',
+            style: googleStyle,
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text('Cancelar'),
         ),
         TextButton(
-          onPressed: () {},
-          child: const Text('Añadir'),
+          child: Text(
+            'Añadir',
+            style: googleStyle,
+          ),
+          onPressed: () async {
+            String name = nameController.text;
+            String location = locationController.text;
+            Event event = Event(
+              name: name,
+              location: location,
+              date: now,
+            );
+            final newEvent = await EventRepository().addEvent(event);
+            print(newEvent.name);
+            Navigator.pop(context);
+          },
         ),
       ],
     );
+  }
+
+  void changeDateState(DateTime newDate) {
+    setState(() {
+      now = newDate;
+    });
   }
 }

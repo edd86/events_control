@@ -29,7 +29,6 @@ class Event {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'name': name,
       'date': date.toIso8601String(),
       'location': location,

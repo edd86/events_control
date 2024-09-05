@@ -1,3 +1,4 @@
+import 'package:events_control/functions/date_time_functions.dart';
 import 'package:events_control/models/event.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -26,7 +27,9 @@ class CardEvent extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 1.h,),
+            SizedBox(
+              height: 1.h,
+            ),
             Text(
               event.location,
               style: GoogleFonts.kanit(),
@@ -37,14 +40,24 @@ class CardEvent extends StatelessWidget {
               children: [
                 FaIcon(
                   FontAwesomeIcons.solidCalendarDays,
-                  size: 18.h,
+                  size: 2.h,
                 ),
-                const Text('25/01/2025'),
+                Text(
+                  DateTimeFunctions().dateToString(event.date),
+                  style: GoogleFonts.kanit(
+                    fontSize: 15,
+                  ),
+                ),
                 FaIcon(
                   FontAwesomeIcons.clock,
-                  size: 18.h,
+                  size: 2.h,
                 ),
-                const Text('10:00 AM'),
+                Text(
+                  DateTimeFunctions().timeToString(event.date),
+                  style: GoogleFonts.kanit(
+                    fontSize: 15,
+                  ),
+                ),
               ],
             )
           ],
