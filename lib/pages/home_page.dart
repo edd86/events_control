@@ -22,6 +22,13 @@ class _HomePageState extends State<HomePage> {
           titleTextStyle: GoogleFonts.kanit(
             fontSize: 25,
             color: Colors.black,
+            shadows: [
+              const Shadow(
+                offset: Offset(0, 0.5),
+                blurRadius: 0.5,
+                color: Colors.grey,
+              ),
+            ],
           ),
           elevation: 5,
           shadowColor: Colors.grey,
@@ -73,11 +80,13 @@ class _HomePageState extends State<HomePage> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton(
+          elevation: 5,
+          tooltip: 'Añadir evento',
           child: const FaIcon(FontAwesomeIcons.calendarPlus),
           onPressed: () {
             showDialog(
               context: context,
-              builder: (context) => EventDialog(),
+              builder: (context) => const EventDialog(),
             );
           },
         ),

@@ -13,6 +13,8 @@ class CardEvent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: Colors.teal[100],
+      elevation: 7,
+      shadowColor: Colors.blueGrey[800],
       child: SizedBox(
         height: 20.h,
         width: double.infinity,
@@ -23,7 +25,7 @@ class CardEvent extends StatelessWidget {
             Text(
               event.name,
               style: GoogleFonts.kanit(
-                fontSize: 15,
+                fontSize: 17.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -32,7 +34,9 @@ class CardEvent extends StatelessWidget {
             ),
             Text(
               event.location,
-              style: GoogleFonts.kanit(),
+              style: GoogleFonts.kanit(
+                fontSize: 16.sp,
+              ),
             ),
             SizedBox(height: 2.h),
             Row(
@@ -40,22 +44,25 @@ class CardEvent extends StatelessWidget {
               children: [
                 FaIcon(
                   FontAwesomeIcons.solidCalendarDays,
-                  size: 2.h,
+                  size: 16.sp,
                 ),
                 Text(
                   DateTimeFunctions().dateToString(event.date),
                   style: GoogleFonts.kanit(
-                    fontSize: 15,
+                    fontSize: 16.sp,
                   ),
+                ),
+                SizedBox(
+                  width: 12.w,
                 ),
                 FaIcon(
                   FontAwesomeIcons.clock,
-                  size: 2.h,
+                  size: 16.sp,
                 ),
                 Text(
                   DateTimeFunctions().timeToString(event.date),
                   style: GoogleFonts.kanit(
-                    fontSize: 15,
+                    fontSize: 16.sp,
                   ),
                 ),
               ],
