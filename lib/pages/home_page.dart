@@ -2,18 +2,14 @@ import 'package:events_control/pages/components/card_event.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import '../repository/event_repository.dart';
+import '../providers/events_provider.dart';
 import 'components/event_dialog.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -37,43 +33,29 @@ class _HomePageState extends State<HomePage> {
             textAlign: TextAlign.center,
           ),
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          actions: [
+            TextButton(
+              onPressed: () {},
+              child: const Text('Edward Cristobal Diaz Valda'),
+            )
+          ],
         ),
-
-        ///FutureBuilder to get the events from the database
-        ///Provider to get the events from the database
-        body: FutureBuilder(
-          future: EventRepository().getEvents(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data!.isEmpty) {
-                return Center(
-                  child: Text(
-                    'No hay eventos registrados',
-                    style: GoogleFonts.kanit(
-                      fontSize: 15.sp,
-                    ),
-                  ),
-                );
-              }
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  final event = snapshot.data![index];
-                  return CardEvent(event: event);
-                },
-              );
-            } else if (snapshot.hasError) {
+        body: Consumer<EventsProvider>(
+          builder: (context, dataprovider, child) {
+            final events = dataprovider.events;
+            if (events.isEmpty) {
               return Center(
                 child: Text(
-                  'Error al obtener eventos',
-                  style: GoogleFonts.kanit(
-                    fontSize: 15.sp,
-                  ),
+                  'No hay eventos registrados.',
+                  style: GoogleFonts.kanit(fontSize: 20.sp),
                 ),
               );
             } else {
-              return const Center(
-                child: CircularProgressIndicator(),
+              return ListView.builder(
+                itemCount: events.length,
+                itemBuilder: (context, index) => CardEvent(
+                  event: events[index],
+                ),
               );
             }
           },

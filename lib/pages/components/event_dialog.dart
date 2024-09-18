@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../providers/events_provider.dart';
 import '../../repository/event_repository.dart';
 
 class EventDialog extends StatefulWidget {
@@ -100,9 +102,9 @@ class _EventDialogState extends State<EventDialog> {
               location: location,
               date: now,
             );
-            final newEvent = await EventRepository().addEvent(event);
-            print(newEvent.name);
-            Navigator.pop(context);
+            await EventRepository().addEvent(event);
+            modifyListener();
+            backPage();
           },
         ),
       ],
@@ -113,5 +115,14 @@ class _EventDialogState extends State<EventDialog> {
     setState(() {
       now = newDate;
     });
+  }
+
+  void modifyListener() {
+    final dataNotifier = Provider.of<EventsProvider>(context, listen: false);
+    dataNotifier.loadEvents();
+  }
+
+  void backPage() {
+    Navigator.pop(context);
   }
 }

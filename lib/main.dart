@@ -1,10 +1,19 @@
 import 'package:events_control/pages/home_page.dart';
+import 'package:events_control/providers/people_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import 'providers/events_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<EventsProvider>(create: (_) => EventsProvider()),
+      ChangeNotifierProvider<PeopleProvider>(create: (_) => PeopleProvider()),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -25,3 +34,15 @@ class MyApp extends StatelessWidget {
     });
   }
 }
+
+/* void main() {
+  runApp(
+    /// Providers are above [MyApp] instead of inside it, so that tests
+    /// can use [MyApp] while mocking the providers
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => Counter()),
+      ],
+      child: const MyApp(),
+    ),
+  ); */
