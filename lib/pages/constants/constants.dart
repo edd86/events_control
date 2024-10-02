@@ -8,4 +8,16 @@ class Constants {
     fontWeight: FontWeight.bold,
     color: Colors.teal[100],
   );
+  final dialogTitleStyle = GoogleFonts.kanit(
+    fontSize: 18.sp,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  );
+  final labelStyle = GoogleFonts.kanit(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.bold,
+  );
+  final textFieldStyle = GoogleFonts.kanit(
+    fontSize: 14.sp,
+  );
 }

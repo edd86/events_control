@@ -5,27 +5,19 @@ import 'package:sqflite/sqflite.dart';
 class EventRepository {
   Future<Event> addEvent(Event event) async {
     final db = await DatabaseHelper().database;
-    final id = await db.insert('events', event.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
-    return event.copyWith(id: id);
+    try {
+      final id = await db.insert('events', event.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace);
+      return event.copyWith(id: id);
+    } catch (e) {
+      print(e);
+      return event;
+    }
   }
 
   Future<List<Event>> getEvents() async {
     final db = await DatabaseHelper().database;
     var eventMaps = await db.query('events');
-
-    ///{
-    ///  "id": 1,
-    ///  "name": "Event 1",
-    ///  "date": "2023-01-01 T00:00:00.000Z",
-    ///  "location": "Location 1"
-    ///} {
-    ///  "id": 2,
-    ///  "name": "Event 2",
-    ///  "date": "2023-01-02 T00:00:00.000Z",
-    ///  "location": "Location 2"
-    ///}
-    ///
     List<Event> events = [];
     for (var eventMap in eventMaps) {
       events.add(Event.fromMap(eventMap));
@@ -35,14 +27,19 @@ class EventRepository {
 
   Future<Event> updateEvent(Event event) async {
     final db = await DatabaseHelper().database;
-    await db
-        .update('events', event.toMap(), where: 'id = ?', whereArgs: [event.id]);
+    await db.update('events', event.toMap(),
+        where: 'id = ?', whereArgs: [event.id]);
     return event;
   }
 
-  Future<Event> deleteEvent(Event event) async {
+  Future<bool> deleteEvent(int id) async {
+    bool deleted = false;
     final db = await DatabaseHelper().database;
-    await db.delete('events', where: 'id = ?', whereArgs: [event.id]);
-    return event;
+    int eventDeleted =
+        await db.delete('events', where: 'id = ?', whereArgs: [id]);
+    if (eventDeleted > 0) {
+      deleted = true;
+    }
+    return deleted;
   }
 }

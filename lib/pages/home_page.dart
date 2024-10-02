@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../providers/events_provider.dart';
 import 'components/event_dialog.dart';
+import 'people_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -47,15 +48,26 @@ class HomePage extends StatelessWidget {
               return Center(
                 child: Text(
                   'No hay eventos registrados.',
-                  style: GoogleFonts.kanit(fontSize: 20.sp),
+                  style: GoogleFonts.kanit(fontSize: 17.sp),
                 ),
               );
             } else {
               return ListView.builder(
                 itemCount: events.length,
-                itemBuilder: (context, index) => CardEvent(
-                  event: events[index],
-                ),
+                itemBuilder: (context, index) {
+                  final event = events[index];
+                  return GestureDetector(
+                    child: CardEvent(
+                      event: event,
+                    ),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PeoplePage(event),
+                      ),
+                    ),
+                  );
+                },
               );
             }
           },

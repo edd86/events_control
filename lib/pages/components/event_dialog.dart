@@ -6,9 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../providers/events_provider.dart';
 import '../../repository/event_repository.dart';
+import '../constants/constants.dart';
 
 class EventDialog extends StatefulWidget {
   const EventDialog({super.key});
@@ -28,10 +28,7 @@ class _EventDialogState extends State<EventDialog> {
     return AlertDialog(
       title: Text(
         'Añadir evento',
-        style: GoogleFonts.kanit(
-          fontSize: 18.sp,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Constants().dialogTitleStyle,
         textAlign: TextAlign.center,
       ),
       content: SizedBox(
@@ -41,6 +38,7 @@ class _EventDialogState extends State<EventDialog> {
           children: [
             TextField(
               controller: nameController,
+              style: googleStyle,
               decoration: InputDecoration(
                 icon: const FaIcon(FontAwesomeIcons.letterboxd),
                 label: Text(
@@ -51,6 +49,7 @@ class _EventDialogState extends State<EventDialog> {
             ),
             TextField(
               controller: locationController,
+              style: googleStyle,
               decoration: InputDecoration(
                 icon: const FaIcon(FontAwesomeIcons.mapLocation),
                 label: Text(

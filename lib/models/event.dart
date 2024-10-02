@@ -20,7 +20,7 @@ class Event {
     String? location,
   }){
     return Event(
-      id: this.id,
+      id: id ?? this.id,
       name: name ?? this.name,
       date: date ?? this.date,
       location: location ?? this.location,

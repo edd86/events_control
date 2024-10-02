@@ -44,9 +44,9 @@ class Person {
     int? age,
     String? email,
     String? phone,
-  }){
+  }) {
     return Person(
-      id: this.id,
+      id: id ?? this.id,
       fullName: fullName ?? this.fullName,
       genre: genre ?? this.genre,
       age: age ?? this.age,

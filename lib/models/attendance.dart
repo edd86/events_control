@@ -41,7 +41,7 @@ class Attendance {
     int? personId,
   }) {
     return Attendance(
-      id: this.id,
+      id: id ??this.id,
       date: date ?? this.date,
       status: status ?? this.status,
       eventId: eventId ?? this.eventId,
