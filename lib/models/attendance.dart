@@ -1,7 +1,7 @@
 class Attendance {
   final int? id;
   final DateTime date;
-  final int status;
+  final int status;  ///boolean  1=true; 0=false
   final int eventId;
   final int personId;
 
@@ -41,7 +41,7 @@ class Attendance {
     int? personId,
   }) {
     return Attendance(
-      id: id ??this.id,
+      id: id ?? this.id,
       date: date ?? this.date,
       status: status ?? this.status,
       eventId: eventId ?? this.eventId,

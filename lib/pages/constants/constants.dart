@@ -20,4 +20,7 @@ class Constants {
   final textFieldStyle = GoogleFonts.kanit(
     fontSize: 14.sp,
   );
+  final textSubtitleStyle = GoogleFonts.kanit(
+    fontSize: 13.sp,
+  );
 }

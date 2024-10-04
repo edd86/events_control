@@ -54,4 +54,19 @@ class PersonRepository {
       return null;
     }
   }
+
+  Future<Person?> getPersonById(int personId) async {
+    try {
+      final db = await DatabaseHelper().database;
+      var personMaps = await db.query(
+        'people',
+        where: 'id = ?',
+        whereArgs: [personId],
+      );
+      Person person = Person.fromMap(personMaps.first);
+      return person;
+    } catch (e) {
+      return null;
+    }
+  }
 }

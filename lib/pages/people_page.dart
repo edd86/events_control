@@ -1,11 +1,14 @@
 // ignore_for_file: must_be_immutable, constant_identifier_names
 
 import 'package:events_control/models/event.dart';
+import 'package:events_control/pages/components/card_person.dart';
 import 'package:events_control/pages/components/person_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
+
+import '../repository/attendance_repository.dart';
 
 class PeoplePage extends StatefulWidget {
   Event event;
@@ -64,6 +67,7 @@ class _PeoplePageState extends State<PeoplePage> {
                 },
               ),
             ),
+            const CardPerson()
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -73,12 +77,23 @@ class _PeoplePageState extends State<PeoplePage> {
             size: 19.sp,
           ),
           onPressed: () {
-            showDialog(
-                context: context,
-                builder: (context) => PersonDialog(widget.event.id!));
+            /*showDialog(
+              context: context,
+              builder: (context) => PersonDialog(widget.event.id!),
+            );*/
+            showRegisters();
           },
         ),
       ),
     );
+  }
+
+  void showRegisters() async {
+    final registers =
+        await AttendanceRepository().getRegisters(widget.event.id!);
+    for (var register in registers) {
+      print(register.personId);
+    }
+    //registers.map((register) => print(register.personId));
   }
 }
