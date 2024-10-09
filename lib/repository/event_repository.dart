@@ -1,6 +1,10 @@
 import 'package:events_control/data/database_helper.dart';
 import 'package:events_control/models/event.dart';
+import 'package:events_control/repository/person_repository.dart';
 import 'package:sqflite/sqflite.dart';
+
+import '../models/attendance.dart';
+import 'attendance_repository.dart';
 
 class EventRepository {
   Future<Event> addEvent(Event event) async {
@@ -10,7 +14,6 @@ class EventRepository {
           conflictAlgorithm: ConflictAlgorithm.replace);
       return event.copyWith(id: id);
     } catch (e) {
-      print(e);
       return event;
     }
   }
@@ -32,14 +35,18 @@ class EventRepository {
     return event;
   }
 
-  Future<bool> deleteEvent(int id) async {
-    bool deleted = false;
+  Future<int> deleteEvent(int id) async {
     final db = await DatabaseHelper().database;
-    int eventDeleted =
-        await db.delete('events', where: 'id = ?', whereArgs: [id]);
-    if (eventDeleted > 0) {
-      deleted = true;
+    int personsDeleted = 0;
+    List<Attendance> attendancesFiltered = await AttendanceRepository().getAttendancesByEvent(id);
+    for (var attendance in attendancesFiltered) {
+      final personDeleted =
+          await PersonRepository().deletePerson(attendance.personId);
+      if (personDeleted != null) {
+        personsDeleted++;
+      }
     }
-    return deleted;
+    await db.delete('events', where: 'id = ?', whereArgs: [id]);
+    return personsDeleted;
   }
 }

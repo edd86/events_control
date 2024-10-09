@@ -1,16 +1,28 @@
+import 'package:events_control/functions/date_time_functions.dart';
 import 'package:events_control/pages/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../models/registers.dart';
+
 class CardPerson extends StatefulWidget {
-  const CardPerson({super.key});
+  final Registers register;
+  const CardPerson({required this.register, super.key});
 
   @override
   State<CardPerson> createState() => _CardPersonState();
 }
 
 class _CardPersonState extends State<CardPerson> {
+  bool status = false;
+
+  @override
+  void initState() {
+    super.initState();
+    status = widget.register.status == 1 ? true : false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -33,18 +45,18 @@ class _CardPersonState extends State<CardPerson> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
-                    'Nombre de la persona',
+                    widget.register.fullName,
                     style: Constants().labelStyle,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Fecha de registro',
+                        DateTimeFunctions().dateToString(widget.register.date),
                         style: Constants().textSubtitleStyle,
                       ),
                       Text(
-                        'Teléfono',
+                        widget.register.phone,
                         style: Constants().textSubtitleStyle,
                       ),
                     ],
@@ -52,7 +64,15 @@ class _CardPersonState extends State<CardPerson> {
                 ],
               ),
             ),
-            Checkbox(value: false, onChanged: (value) {})
+            Checkbox(
+              value: status,
+              activeColor: Colors.teal[300],
+              onChanged: (value) {
+                setState(() {
+                  status = value!;
+                });
+              },
+            )
           ],
         ),
       ),

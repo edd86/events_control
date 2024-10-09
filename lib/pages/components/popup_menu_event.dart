@@ -60,12 +60,12 @@ class PopupMenuEvent extends StatelessWidget {
       onSelected: (value) async {
         switch (value) {
           case Items.Delete:
-            final bool deleted = await EventRepository().deleteEvent(id);
-            if (deleted) {
+            final int deletedPersons = await EventRepository().deleteEvent(id);
+            if (deletedPersons > 0) {
               modifyListener(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Evento Eliminado'),
+                SnackBar(
+                  content: Text('Se eliminaron $deletedPersons personas'),
                 ),
               );
             } else {

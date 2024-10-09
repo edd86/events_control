@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 
 import '../repository/attendance_repository.dart';
+import 'constants/constants.dart';
 
 class PeoplePage extends StatefulWidget {
   Event event;
@@ -50,7 +51,7 @@ class _PeoplePageState extends State<PeoplePage> {
                   ButtonSegment<Status>(
                     value: Status.Accepted,
                     label: Text(
-                      'Aceptados',
+                      'Asistentes',
                       style: GoogleFonts.kanit(fontSize: 12.sp),
                     ),
                     icon: FaIcon(
@@ -67,7 +68,81 @@ class _PeoplePageState extends State<PeoplePage> {
                 },
               ),
             ),
-            const CardPerson()
+            state == Status.Registered
+                ? Expanded(
+                    child: FutureBuilder(
+                      future: AttendanceRepository()
+                          .getRegisters(widget.event.id!, false),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text('${snapshot.error}'),
+                          );
+                        }
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              final register = snapshot.data![index];
+                              return CardPerson(
+                                register: register,
+                              );
+                            },
+                          );
+                        } else {
+                          return Center(
+                            child: Text(
+                              'No hay registros de personas',
+                              style: Constants().labelStyle,
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  )
+                : Expanded(
+                    child: FutureBuilder(
+                      future: AttendanceRepository()
+                          .getRegisters(widget.event.id!, true),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text('${snapshot.error}'),
+                          );
+                        }
+                        if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                          return ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              final register = snapshot.data![index];
+                              return CardPerson(
+                                register: register,
+                              );
+                            },
+                          );
+                        } else {
+                          return Center(
+                            child: Text(
+                              'No hay registros de Asistentes',
+                              style: Constants().labelStyle,
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  )
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -76,24 +151,15 @@ class _PeoplePageState extends State<PeoplePage> {
             FontAwesomeIcons.personCirclePlus,
             size: 19.sp,
           ),
-          onPressed: () {
-            /*showDialog(
+          onPressed: () async {
+            await showDialog(
               context: context,
               builder: (context) => PersonDialog(widget.event.id!),
-            );*/
-            showRegisters();
+            );
+            setState(() {});
           },
         ),
       ),
     );
-  }
-
-  void showRegisters() async {
-    final registers =
-        await AttendanceRepository().getRegisters(widget.event.id!);
-    for (var register in registers) {
-      print(register.personId);
-    }
-    //registers.map((register) => print(register.personId));
   }
 }

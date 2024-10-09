@@ -22,8 +22,9 @@ class AttendanceRepository {
     try {
       var attendanceMaps = await db.query('attendances');
       List<Attendance> attendances = [];
-      attendanceMaps.map((attendanceMap) =>
-          attendances.add(Attendance.fromMap(attendanceMap)));
+      for (var attendance in attendanceMaps) {
+        attendances.add(Attendance.fromMap(attendance));
+      }
       return attendances;
     } catch (e) {
       return [];
@@ -52,7 +53,25 @@ class AttendanceRepository {
     }
   }
 
-  Future<List<Registers>> getRegisters(int eventId) async {
+  Future<List<Attendance>> getAttendancesByEvent(int eventId) async {
+    try {
+      final db = await DatabaseHelper().database;
+      var attendanceMaps = await db.query(
+        'attendances',
+        where: 'eventId = ?',
+        whereArgs: [eventId],
+      );
+      List<Attendance> attendances = [];
+      for (var attendance in attendanceMaps) {
+        attendances.add(Attendance.fromMap(attendance));
+      }
+      return attendances;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<Registers>> getRegisters(int eventId, bool status) async {
     try {
       final db = await DatabaseHelper().database;
       var attendanceMaps = await db.query(
@@ -84,7 +103,11 @@ class AttendanceRepository {
           );
         }
       }
-      return registers;
+      if (status) {
+        return registers.where((register) => register.status == 1).toList();
+      } else {
+        return registers.where((register) => register.status == 0).toList();
+      }
     } catch (exc) {
       return [];
     }

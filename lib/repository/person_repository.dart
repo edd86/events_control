@@ -45,11 +45,11 @@ class PersonRepository {
     }
   }
 
-  Future<Person?> deletePerson(Person person) async {
+  Future<int?> deletePerson(int id) async {
     try {
       final db = await DatabaseHelper().database;
-      await db.delete('people', where: 'id = ?', whereArgs: [person.id]);
-      return person;
+      int idDeleted =await db.delete('people', where: 'id = ?', whereArgs: [id]);
+      return idDeleted;
     } catch (e) {
       return null;
     }
