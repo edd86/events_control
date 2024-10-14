@@ -38,12 +38,15 @@ class EventRepository {
   Future<int> deleteEvent(int id) async {
     final db = await DatabaseHelper().database;
     int personsDeleted = 0;
-    List<Attendance> attendancesFiltered = await AttendanceRepository().getAttendancesByEvent(id);
-    for (var attendance in attendancesFiltered) {
-      final personDeleted =
-          await PersonRepository().deletePerson(attendance.personId);
-      if (personDeleted != null) {
-        personsDeleted++;
+    List<Attendance> attendancesFiltered =
+        await AttendanceRepository().getAttendancesByEvent(id);
+    if (attendancesFiltered.isNotEmpty) {
+      for (var attendance in attendancesFiltered) {
+        final personDeleted =
+            await PersonRepository().deletePerson(attendance.personId);
+        if (personDeleted != null) {
+          personsDeleted++;
+        }
       }
     }
     await db.delete('events', where: 'id = ?', whereArgs: [id]);
